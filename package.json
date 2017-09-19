@@ -17,11 +17,15 @@
   },
   "homepage": "https://github.com/quetzalt52/NYT-React-Search#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "body-parser": "^1.18.1",
     "express": "^4.15.4",
+    "husky": "^0.14.3",
     "init": "^0.1.2",
+    "lint-staged": "^4.2.1",
     "mongoose": "^4.11.12",
     "nodemon": "^1.12.1",
+    "prettier": "^1.7.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2"
   }
