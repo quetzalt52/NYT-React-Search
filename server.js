@@ -1,12 +1,12 @@
 // Dependencies
 const express = require("express");
 const bodyParser = require("body-parser");
-//const logger = require("morgan");
+const logger = require("morgan");
 const mongoose = require("mongoose");
-const logger = require("./routes");
+//const logger = require("./routes");
 
 // Require Article Schema
-const Article = require("./models/Article");
+const Article = require("./models/article");
 
 // Create Instance of Express
 const app = express();

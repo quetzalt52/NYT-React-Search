@@ -24,6 +24,7 @@
     "init": "^0.1.2",
     "lint-staged": "^4.2.1",
     "mongoose": "^4.11.12",
+    "morgan": "^1.8.2",
     "nodemon": "^1.12.1",
     "prettier": "^1.7.0",
     "react-router": "^4.2.0",

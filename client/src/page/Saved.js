@@ -20,7 +20,7 @@ conts Saved = React.createClass({
 		// set the state of the article_id we're deleting
 		this.setState({
 			article_delete: {
-				article_id: article_id
+			article_id: article_id
 			}
     }, function() {
 

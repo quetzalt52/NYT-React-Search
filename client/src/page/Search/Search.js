@@ -7,7 +7,7 @@ import API from "../../utils/API";
 import { Col, Row, Container } from "../../components/Grid";
 import { ArticleList, ArticleListItem } from "../../components/ArticleList";
 import { Input,FormBtn } from "../../components/Form";
-conts API = require('./utils/API');
+const API = require('./utils/API');
 
 class Search extends Component {
   // Setting our component's initial state
@@ -32,7 +32,7 @@ class Search extends Component {
 
 	}, // end setArticles()
 
-	// same as above in that we need this function to automatically display the items on the page with componentDidUpdate function
+	//  this function will automatically display the items on the page
 	setDeleteArticles: function(article_deleted) {
 
 		this.setState({
@@ -45,7 +45,7 @@ class Search extends Component {
 	getArticlesFromHelpers: function() {
 
 		// access helpers.js to use the getArticles function and access the get route defined in server.js
-		helpers.getArticles()
+		API.getArticles()
 			.then(function(response) {
 
 				// set the state of articles with the articles stored in the database
