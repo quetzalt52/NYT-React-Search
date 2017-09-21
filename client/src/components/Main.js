@@ -1,7 +1,7 @@
-var React = require('react');
-var Router = require('react-router')
+const React = require('react');
+const Router = require('react-router')
 
-var Main = React.createClass({
+const Main = React.createClass({
 
   render: function(){
 

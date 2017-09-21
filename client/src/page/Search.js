@@ -1,10 +1,10 @@
-conts React = require('react');
-conts API = require('../utils/API');
+const React = require('react');
+const API = require('../utils/API');
 
 // socket.io assignment to variable
-var socket = io();
+const socket = io();
 
-var Search = React.createClass({
+const Search = React.createClass({
 
 	getInitialState: function() {
 
@@ -45,7 +45,7 @@ var Search = React.createClass({
 		event.preventDefault();
 
 		// set the title of the article being saved to the db in a variable for socket.io to use
-		var socket_article_title = event.target.parentElement.children[2].innerHTML;
+		const socket_article_title = event.target.parentElement.children[2].innerHTML;
 
 		// emit the message with socket io. WARNING!!! can't use socket.on in here as it attaches event listners each time it's clicked and will call it multiple times. I put the socket.on call in a method below that self invokes
 		socket.emit('message', socket_article_title);
@@ -78,13 +78,13 @@ var Search = React.createClass({
 		socket.on('message', function(article_to_emit) {
 
 			// ge the element I want the title to appear on
-			var just_added = document.getElementById('just-added');
+			const just_added = document.getElementById('just-added');
 
 			// clear out any text that was previously in that element
 			just_added.innerHTML = '';
 
 			// create the text node of the article's title
-			var title_text_node = document.createTextNode('Title Added: ' + article_to_emit);
+			const title_text_node = document.createTextNode('Title Added: ' + article_to_emit);
 
 			// append the title to the element
 			just_added.appendChild(title_text_node);

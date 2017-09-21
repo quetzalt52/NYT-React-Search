@@ -1,10 +1,10 @@
 import axios from "axios";
-conts axios = require('axios');
-conts API = {
+const axios = require('axios');
+const API = {
 searchNYT: function(searchTopic, startYear, endYear) {
-  conts nytAPI =  "ccd643a4a1be49fea941d4a756f36147";
+  const nytAPI =  "ccd643a4a1be49fea941d4a756f36147";
   // build the query url for the new york times api
-		var queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + nytAPI + "&q=";
+		const queryURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + nytAPI + "&q=";
 			queryURL += searchTopic;
 			queryURL += "&begin_date=" + startYear + "0101";
 			queryURL += "&end_date=" + endYear + "0101";
@@ -13,11 +13,11 @@ searchNYT: function(searchTopic, startYear, endYear) {
     			.then(function(nytdata) {
 
     				// store the articles returned in a variable
-    				var articles = nytdata.data.response.docs;
+    				const articles = nytdata.data.response.docs;
 
     				// map through the array and build an object for each article that holds the data we need to pass back to the Search component
-    				var articles_obj_array = articles.map(function(article) {
-    					var articlesObj = {
+    				const articles_obj_array = articles.map(function(article) {
+    					const articlesObj = {
     						title: article.title,
     						date: article.date,
     						url: article.url
@@ -38,7 +38,7 @@ searchNYT: function(searchTopic, startYear, endYear) {
     		// console.log(article_to_post);
 
     		// use axios to grab the post route defined in our server.js file so we can post this article to the db
-    		return axios.post('/api',article_to_post)
+    		return axios.post('/',article_to_post)
     			.then(function(response) {
 
     				// return(results);
@@ -51,7 +51,7 @@ searchNYT: function(searchTopic, startYear, endYear) {
     	getArticles: function() {
 
     		// using axios to access the get route defined in server.js and will return all the articles in our db
-    		return axios.get('/api')
+    		return axios.get('/')
     			.then(function(response) {
 
     				// return response so we have access to it in main.js, which will then set the state and send it to saved.js
@@ -65,7 +65,7 @@ searchNYT: function(searchTopic, startYear, endYear) {
     	deleteArticle: function(article_id) {
 
     		// use axios to access the api/delete route. Needed to make this one different from the others as I couldn't get .delete to work so needed to use .post to remove from mongodb
-    		return axios.post('/api/delete/', article_id)
+    		return axios.post('/delete/', article_id)
     			.then(function(response) {
 
     				return response;

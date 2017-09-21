@@ -1,7 +1,7 @@
-conts React = require('react');
-conts API = require('../utils/API');
+const React = require('react');
+const API = require('../utils/API');
 
-conts Saved = React.createClass({
+const Saved = React.createClass({
   getInitialState: function() {
 
 		return {
@@ -15,7 +15,7 @@ conts Saved = React.createClass({
 		event.preventDefault();
 
 		// set the id of the article to delete to the article_id variable
-		conts article_id = event.target.parentElement.children[0].id;
+		const article_id = event.target.parentElement.children[0].id;
 
 		// set the state of the article_id we're deleting
 		this.setState({

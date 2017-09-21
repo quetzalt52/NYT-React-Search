@@ -85,9 +85,9 @@ class Search extends Component {
 				</div>
 
 				<div className="search">
-				{/* we need to pass the ability to update the parent that an article has been saved to the database so that the articles can be added automatically to the saved component below */}
-					<Search setArticles={this.setArticles} />
-				}
+				/* we need to pass the ability to update the parent that an article has been saved to the database so that the articles can be added automatically to the saved component below */
+         <Search setArticles={this.setArticles} />
+
 				</div>
 
 				<div className="saved">
