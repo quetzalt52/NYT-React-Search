@@ -1,8 +1,8 @@
 
-var mongoose = require("mongoose");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var articleSchema = new Schema({
+const articleSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -18,6 +18,6 @@ var articleSchema = new Schema({
   }
 });
 
-var Article = mongoose.model("Article", articleSchema);
-var Article = mongoose.model("Article", articleSchema);
+const Article = mongoose.model("Article", articleSchema);
+const Article = mongoose.model("Article", articleSchema);
 module.exports = Article;

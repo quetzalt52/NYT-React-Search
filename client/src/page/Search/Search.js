@@ -1,104 +1,168 @@
 import React, { Component } from "react";
 import Jumbotron from "../../components/Jumbotron";
-import RemoveBtn from "../../components/RemoveBtn";
-import SaveBtn from "../../components/SaveBtn";
-import SearchBtn from "../../components/SearchBtn";
 import API from "../../utils/API";
+import DeleteBtn from "../../components/RemoveBtn";
 import { Col, Row, Container } from "../../components/Grid";
-import { ArticleList, ArticleListItem } from "../../components/ArticleList";
-import { Input,FormBtn } from "../../components/Form";
-const API = require('./utils/API');
+import { List, ListItem } from "../../components/ArticleList";
+import { Input, TextArea, FormBtn } from "../../components/Form";
+const React = require('react');
+const API = require('../utils/API');
+
+// socket.io assignment to variable
+const socket = io();
 
 class Search extends Component {
-  // Setting our component's initial state
-  socketio: io(),
+	state = {
+		articles: []
+	};
 
 	getInitialState: function() {
-
 		return {
-			topic: '',
-			articles: [],
-			article_deleted: {}
+			search_topic: '',
+			start_year: '',
+			end_year: '',
+			nytdata: []
 		}
 
 	}, // end getInitialState()
 
-	// we need this function so the child can update the parent that an article has been saved and can then call componentDidUpdate and pull that article into the saved section without refreshing the page
-	setArticles: function(search_topic) {
+	changedData: function(event) {
 
+		// resetting the state each time the user changes something in any of the inputs by setting the id of the inputs to be the same as the key in the returned state object
+		this.setState({[event.target.id]: event.target.value});
+
+	}, // end changedData
+
+	queryData: function(event) {
+
+		event.preventDefault();
+
+		// call the function below in the helpers.js file
+		API.searchNYT(this.state.search_topic, this.state.start_year, this.state.end_year)
+			.then(function(data) {
+
+				// set the state of nytdata to all the data returned from the ny times api so we can map through it and display it to the screen below
+				this.setState({nytdata: data});
+
+		// .bind so we have this refering to the object returned
+		}.bind(this));
+
+	}, // end queryData()
+
+	clickHandler: function(event) {
+
+		event.preventDefault();
+
+		// set the title of the article being saved to the db in a variable for socket.io to use
+		const socket_article_title = event.target.parentElement.children[2].innerHTML;
+
+		// emit the message with socket io. WARNING!!! can't use socket.on in here as it attaches event listners each time it's clicked and will call it multiple times. I put the socket.on call in a method below that self invokes
+		socket.emit('message', socket_article_title);
+
+		// this.getConnected(socket_article_title);
+
+		// set the state of the article we're saving
 		this.setState({
-			topic: search_topic
-		});
+			article_to_save: {
+				article_title: event.target.parentElement.children[2].innerHTML,
+				article_url: event.target.parentElement.children[2].href,
+				article_date: event.target.parentElement.children[4].innerHTML
+			}
+		// callback function so the state can update before we do anyting this that data
+		}, function() {
 
-	}, // end setArticles()
+			// call the postArticle function and pass the article
+			API.postArticle(this.state.article_to_save);
 
-	//  this function will automatically display the items on the page
-	setDeleteArticles: function(article_deleted) {
+			// need to call the setArticles function in main.js so that the newly saved articles to the database automatically show up in the saved section
+			this.props.setArticles(this.state.search_topic);
 
-		this.setState({
-			article_deleted: article_deleted
-		});
+		});	// end setState()
 
-	}, // end setDeleteArticles()
+	}, // end clickHandler()
 
-	// we will call this function form the component did mount and component did update functions below
-	getArticlesFromHelpers: function() {
+	socketIoConnection: function() {
 
-		// access helpers.js to use the getArticles function and access the get route defined in server.js
-		API.getArticles()
-			.then(function(response) {
+		// send the title of the article through socket.io
+		socket.on('message', function(article_to_emit) {
 
-				// set the state of articles with the articles stored in the database
-				this.setState({
-					articles: response.data
-				})
+			// ge the element I want the title to appear on
+			const just_added = document.getElementById('just-added');
 
-		}.bind(this)); // end helpers.getArticles()
+			// clear out any text that was previously in that element
+			just_added.innerHTML = '';
 
-	}, // end getArticlesFromHelpers()
+			// create the text node of the article's title
+			const title_text_node = document.createTextNode('Title Added: ' + article_to_emit);
 
-	componentDidUpdate: function() {
+			// append the title to the element
+			just_added.appendChild(title_text_node);
 
-		// this is being called whenever a save article button is pressed in the search.js file
-		this.getArticlesFromHelpers();
+		}); // end socket.on()
 
-	}, // end componentDidUpdate()
-
-	// once the page loads get all the articles in the database
-	componentDidMount: function() {
-
-		this.getArticlesFromHelpers();
-
-	}, // end componentDidMount()
+	// socktIoConnection is a self invoking function so that it's ready to go from page load
+	}(),
 
 	render: function() {
 
 		return (
 
-			<div>
+			<div className="container">
 
-				<div className="jumbotron">
-					<div className="container">
-						<h1>New York Times Article Scrubber</h1>
-						<p>Search for and annotate articles of interest!</p>
+				<div className="row">
+					<div className="col-md-12">
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								<h2 id="testing">Search</h2>
+								<span id="just-added"></span>
+							</div>
+							<div className="panel-body">
+								<form>
+									<div className="form-group">
+										<label>Topic</label>
+										<input type="text" className="form-control" id="search_topic" onChange={this.changedData} />
+									</div>
+									<div className="form-group">
+										<label>Start Year</label>
+										<input type="text" className="form-control" id="start_year" onChange={this.changedData} />
+									</div>
+									<div className="form-group">
+										<label>End Year</label>
+										<input type="text" className="form-control" id="end_year" onChange={this.changedData} />
+									</div>
+									<a href="" className="btn btn-primary" onClick={this.queryData} >Seach</a>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<div className="search">
-				/* we need to pass the ability to update the parent that an article has been saved to the database so that the articles can be added automatically to the saved component below */
-         <Search setArticles={this.setArticles} />
+				<div className="row">
+					<div className="col-md-12">
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								<h2>Results</h2>
+							</div>
+							<div className="panel-body" onClick={this.clickHandler}>
 
-				</div>
+								{/* loop through the articles returned and display to screen with a save button */}
+								{this.state.nytdata.map(function(article, i) {
 
-				<div className="saved">
-					<Saved
-						articles={this.state.articles}
-						setDeleteArticles={this.setDeleteArticles} />
+									return <p key={i}><a href="" className="btn btn-primary">Save</a> <a href={article.url}>{article.title}</a> <span>{article.date}</span></p>
+
+								})}
+
+							</div>
+						</div>
+					</div>
 				</div>
 
 			</div>
 
-		);
-	}
+		) // end return()
 
-});
+	} // end render()
+
+}); // end Search
+
+module.exports = Search;

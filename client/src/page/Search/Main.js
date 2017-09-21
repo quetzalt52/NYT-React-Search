@@ -1,5 +1,11 @@
 const React = require('react');
-const Router = require('react-router')
+const Router = require('react-router');
+import Jumbotron from "../../components/Jumbotron";
+import API from "../../utils/API";
+import DeleteBtn from "../../components/RemoveBtn";
+import { Col, Row, Container } from "../../components/Grid";
+import { List, ListItem } from "../../components/ArticleList";
+import { Input, TextArea, FormBtn } from "../../components/Form";
 
 const Main = React.createClass({
 
